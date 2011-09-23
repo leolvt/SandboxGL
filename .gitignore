@@ -1,0 +1,16 @@
+## To see if new rules exclude any existing files, run
+##
+##   git ls-files -i --exclude-standard
+##
+## after modifying this file.
+
+# Ignore build dir
+build/*
+
+## Editor backup and swap files
+*~
+.\#*
+\#**\#
+.*.sw[op]
+.sw[op]
+

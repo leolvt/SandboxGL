@@ -1,6 +1,12 @@
 cmake_minimum_required(VERSION 2.6)
-project(HelloGL)
+project(SandboxGL)
 
-add_subdirectory(src)
+set(CMAKE_MODULE_PATH
+  ${CMAKE_MODULE_PATH}
+  "${CMAKE_CURRENT_SOURCE_DIR}/cmake"
+  "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules"
+)
 
-install(DIRECTORY samples/ DESTINATION .)
+add_subdirectory(HelloGL)
+
+

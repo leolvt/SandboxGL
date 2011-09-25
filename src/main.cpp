@@ -1,78 +1,117 @@
-#include <stdio.h>
+#include <iostream>
+#include <cmath>
+
 #include <GL/glew.h>
 #include <GL/glut.h>
 
 #include "Util.h"
 
+/* ==================================== */
+
 GLuint program;
-GLint attribute_coord2d;
+GLuint vbo_triangle, vbo_triangle_colors;
+GLint attribute_coord2d, attribute_v_color;
+GLint uniform_fade;
 
+/* ==================================== */
 
-/*
- * Display compilation errors from the OpenGL shader compiler
- *
-void print_log(GLuint object)
+bool initResources()
 {
-    GLint log_length = 0;
-    if (glIsShader(object))
-        glGetShaderiv(object, GL_INFO_LOG_LENGTH, &log_length);
-    else if (glIsProgram(object))
-        glGetProgramiv(object, GL_INFO_LOG_LENGTH, &log_length);
-    else {
-        fprintf(stderr, "printlog: Not a shader or a program\n");
-        return;
+    std::cout << "===== Init Resources =====" << std::endl;
+
+    std::cout << ">> Checking OpenGL Version..." << std::endl;
+    if (!GLEW_VERSION_2_0) {
+        std::cerr << "Error: your graphic card does not support OpenGL 2.0" << std::endl;
+        return false;
+    }
+    std::cout << ">> Done." << std::endl;
+
+    // Compile shaders from files
+    std::cout << ">> Compiling shaders ..." << std::endl;
+    GLuint vs = Util::createShader("vshader.glsl", GL_VERTEX_SHADER) ;
+    std::cout << ">> Vertex Shader Compiled!" << std::endl << std::flush;
+    GLuint fs = Util::createShader("fshader.glsl", GL_FRAGMENT_SHADER) ;
+    std::cout << ">> Fragment Shader Compiled!" << std::endl << std::flush;
+    if (vs == 0 || fs == 0) return false;
+    std::cout << ">> Done." << std::endl;
+
+    // Link Shaders to the program
+    std::cout << ">> Linking Program ..." << std::endl;
+    GLint link_ok = GL_FALSE;
+    program = glCreateProgram();
+    glAttachShader(program, vs);
+    glAttachShader(program, fs);
+    glLinkProgram(program);
+    glGetProgramiv(program, GL_LINK_STATUS, &link_ok);
+    if (!link_ok) {
+        std::cerr << "Error linking shaders!" << std::endl; 
+        Util::printLog(program);
+    }
+    std::cout << ">> Done." << std::endl;
+
+    // Create VBO for our triangle
+    std::cout << ">> Creating triangle VBO ..." << std::endl;
+    GLfloat triangle_vertices[] = {
+        0.0,  0.8,
+        -0.8, -0.8,
+        0.8, -0.8,
+    };
+    glGenBuffers(1, &vbo_triangle);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_triangle);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(triangle_vertices), triangle_vertices, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    GLfloat triangle_colors[] = {
+        1.0, 1.0, 0.0,
+        0.0, 0.0, 1.0,
+        1.0, 0.0, 0.0,
+    };
+    glGenBuffers(1, &vbo_triangle_colors);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_triangle_colors);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(triangle_colors), triangle_colors, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    std::cout << ">> Done." << std::endl;
+
+    // Bind attribute to program
+    std::cout << ">> Binding coord2d ..." << std::endl;
+    const char* attribute_name = "coord2d";
+    attribute_coord2d = glGetAttribLocation(program, attribute_name);
+    if (attribute_coord2d == -1) {
+        std::cerr << "Could not bind attribute " << attribute_name << std::endl;
+        return false;
+    }
+    const char* attribute_color_name = "v_color";
+    attribute_v_color = glGetAttribLocation(program, attribute_color_name);
+    if (attribute_v_color == -1) {
+        std::cerr << "Could not bind attribute " << attribute_color_name << std::endl;
+        return false;
+    }
+    glDisableVertexAttribArray(attribute_v_color);
+    std::cout << ">> Done." << std::endl;
+
+    // Define Uniform attribute
+    const char* uniform_name;
+    uniform_name = "fade";
+    uniform_fade = glGetUniformLocation(program, uniform_name);
+    if (uniform_fade == -1) {
+        std::cerr << "Could not bind uniform " << uniform_name << std::endl;
+        return false;
     }
 
-    char* log = (char*)malloc(log_length);
-
-    if (glIsShader(object))
-        glGetShaderInfoLog(object, log_length, NULL, log);
-    else if (glIsProgram(object))
-        glGetProgramInfoLog(object, log_length, NULL, log);
-
-    fprintf(stderr, "%s", log);
-    free(log);
+    std::cout << std::endl;
+    return true;
 }
-*/
 
-/* 
- * Compile the shader from file 'filename', with error handling
- */
-GLint create_shader(const char* filename, GLenum type)
+/* ==================================== */
+
+void freeResources()
 {
-    const GLchar* source = ReadFileIntoString(filename).c_str();
-    if (source == NULL) {
-        fprintf(stderr, "Error opening %s: ", filename); perror("");
-        return 0;
-    }
-    GLuint res = glCreateShader(type);
-    glShaderSource(res, 1, &source, NULL);
-    free((void*)source);
-
-    glCompileShader(res);
-    GLint compile_ok = GL_FALSE;
-    glGetShaderiv(res, GL_COMPILE_STATUS, &compile_ok);
-    if (compile_ok == GL_FALSE) {
-        fprintf(stderr, "%s:", filename);
-    //    print_log(res);
-        glDeleteShader(res);
-        return 0;
-    }
-
-    return res;
+    std::cout << "Free Resources" << std::endl;\
+        glDeleteProgram(program);
+    glDeleteBuffers(1, &vbo_triangle);
 }
 
-int init_resources()
-{
-    GLuint vs, fs;
-    if ((vs = create_shader("v.glsl", GL_VERTEX_SHADER))   == 0) return 0;
-    if ((fs = create_shader("f.glsl", GL_FRAGMENT_SHADER)) == 0) return 0;
-    if (!true) {
-        fprintf(stderr, "glLinkProgram:");
-        //print_log(program);
-    }
-
-}
+/* ==================================== */
 
 void display()
 {
@@ -81,22 +120,30 @@ void display()
     /* Clear the background as white */
     glClearColor(1.0, 1.0, 1.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
+    // glUniform1f(uniform_fade, 0.1);
 
-    glEnableVertexAttribArray(attribute_coord2d);
-    GLfloat triangle_vertices[] = {
-        0.0,  0.8,
-        -0.8, -0.8,
-        0.8, -0.8,
-    };
     /* Describe our vertices array to OpenGL (it can't guess its format automatically) */
+    glEnableVertexAttribArray(attribute_coord2d);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_triangle);
     glVertexAttribPointer(
             attribute_coord2d, // attribute
             2,                 // number of elements per vertex, here (x,y)
             GL_FLOAT,          // the type of each element
             GL_FALSE,          // take our values as-is
             0,                 // no extra data between each position
-            triangle_vertices  // pointer to the C array
+            0                  // offset of first element
             );
+    
+    glEnableVertexAttribArray(attribute_v_color);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_triangle_colors);
+    glVertexAttribPointer(
+        attribute_v_color, // attribute
+        3,                 // number of elements per vertex, here (r,g,b)
+        GL_FLOAT,          // the type of each element
+        GL_FALSE,          // take our values as-is
+        0,                 // no extra data between each position
+        0                  // offset of first element
+     );
 
     /* Push each element in buffer_vertices to the vertex shader */
     glDrawArrays(GL_TRIANGLES, 0, 3);
@@ -106,34 +153,42 @@ void display()
     glutSwapBuffers();
 }
 
-void free_resources()
+/* ==================================== */
+
+void
+idle()
 {
-    glDeleteProgram(program);
+    float cur_fade = sinf(glutGet(GLUT_ELAPSED_TIME) / 1000.0 * (2*3.14) / 2) / 2 + 0.5; // 0->1->0 every 5 seconds
+    glUniform1f(uniform_fade, cur_fade);
+    glutPostRedisplay();
 }
 
-#include <iostream>
+/* ==================================== */
 
-int main(int argc, char* argv[]) {
-    
-    std::cout << ReadFileIntoString("file.txt");
-    
+int main(int argc, char* argv[]) 
+{
     glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_RGBA|GLUT_DOUBLE|GLUT_DEPTH);
+    glutInitDisplayMode(GLUT_RGBA|GLUT_ALPHA|GLUT_DOUBLE|GLUT_DEPTH);
     glutInitWindowSize(640, 480);
     glutCreateWindow("My First Triangle");
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     GLenum glew_status = glewInit();
-    if (glew_status != GLEW_OK) {
+    if (glew_status != GLEW_OK) 
+    {
+        std::cerr << "Error: " << glewGetErrorString(glew_status) << std::endl;
         return 1;
     }
 
-    if (init_resources()) {
+    if (initResources()) 
+    {
         glutDisplayFunc(display);
+        glutIdleFunc(idle);
         glutMainLoop();
     }
 
-    free_resources();
-    
+    freeResources();
     return 0;
 }
-
+/* ==================================== */

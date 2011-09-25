@@ -10,3 +10,5 @@ set(HGL_SRC ${HGL_SRC}
 
 add_executable(helloGL ${HGL_SRC})
 target_link_libraries(helloGL ${HGL_LIBS})
+
+install(TARGETS helloGL DESTINATION bin)

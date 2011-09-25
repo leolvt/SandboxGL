@@ -4,8 +4,9 @@
 ##
 ## after modifying this file.
 
-# Ignore build dir
+# Ignore build dir and install (test) dir
 build/*
+install/*
 
 ## Editor backup and swap files
 *~

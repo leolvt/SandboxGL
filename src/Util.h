@@ -2,27 +2,19 @@
 #define UTIL_H_INCLUDED
 
 #include <string>
-#include <exception>
+#include <GL/glew.h>
+#include <GL/glut.h>
 
-class BadFileException: public std::exception
+/* ==================================== */
+
+class Util
 {
     public:
-        BadFileException(std::string msg) 
-        {
-            this->msg = msg;
-        }
-
-        virtual const char* what() const throw()
-        {
-            return msg.c_str();
-        }
-
-        virtual ~BadFileException() throw() {}
-    private:
-        std::string msg;
+        std::string static readFile(std::string filename);
+        void static printLog(GLuint object);
+        GLint static createShader(std::string filename, GLenum type);
 };
 
-std::string ReadFileIntoString(std::string filename);
+/* ==================================== */
 
-#endif  /* UTIL_H_INCLUDED */
-
+#endif /* UTIL_H_INCLUDED */

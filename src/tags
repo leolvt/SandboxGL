@@ -3,17 +3,22 @@
 !_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
-!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
-BadFileException	Util.h	/^        BadFileException(std::string msg) $/;"	f	class:BadFileException	access:public	signature:(std::string msg)
-BadFileException	Util.h	/^class BadFileException: public std::exception$/;"	c	inherits:std::exception
-BadFileException::BadFileException	Util.h	/^        BadFileException(std::string msg) $/;"	f	class:BadFileException	access:public	signature:(std::string msg)
-BadFileException::msg	Util.h	/^        std::string msg;$/;"	m	class:BadFileException	access:private
-BadFileException::what	Util.h	/^        virtual const char* what() const throw()$/;"	f	class:BadFileException	access:public	signature:() const
-BadFileException::~BadFileException	Util.h	/^        virtual ~BadFileException() throw() {}$/;"	f	class:BadFileException	access:public	signature:()
-ReadFileIntoString	Util.cpp	/^ReadFileIntoString(std::string filename)$/;"	f	signature:(std::string filename)
-ReadFileIntoString	Util.h	/^std::string ReadFileIntoString(std::string filename);$/;"	p	signature:(std::string filename)
+!_TAG_PROGRAM_VERSION	5.8	//
 UTIL_H_INCLUDED	Util.h	2;"	d
-main	main.cpp	/^int main(int argc, char* argv[]) {$/;"	f	signature:(int argc, char* argv[])
-msg	Util.h	/^        std::string msg;$/;"	m	class:BadFileException	access:private
-what	Util.h	/^        virtual const char* what() const throw()$/;"	f	class:BadFileException	access:public	signature:() const
-~BadFileException	Util.h	/^        virtual ~BadFileException() throw() {}$/;"	f	class:BadFileException	access:public	signature:()
+Util	Util.h	/^class Util$/;"	c
+Util::createShader	Util.cpp	/^GLint Util::createShader(const char* filename, GLenum type)$/;"	f	class:Util	signature:(const char* filename, GLenum type)
+Util::createShader	Util.h	/^        GLint static createShader(const char* filename, GLenum type);$/;"	p	class:Util	access:public	signature:(const char* filename, GLenum type)
+Util::printLog	Util.cpp	/^void Util::printLog(GLuint object)$/;"	f	class:Util	signature:(GLuint object)
+Util::printLog	Util.h	/^        void static printLog(GLuint object);$/;"	p	class:Util	access:public	signature:(GLuint object)
+Util::readFile	Util.cpp	/^std::string Util::readFile(std::string filename)$/;"	f	class:Util	signature:(std::string filename)
+Util::readFile	Util.h	/^        std::string static readFile(std::string filename);$/;"	p	class:Util	access:public	signature:(std::string filename)
+createShader	Util.cpp	/^GLint Util::createShader(const char* filename, GLenum type)$/;"	f	class:Util	signature:(const char* filename, GLenum type)
+createShader	Util.h	/^        GLint static createShader(const char* filename, GLenum type);$/;"	p	class:Util	access:public	signature:(const char* filename, GLenum type)
+display	main.cpp	/^void display()$/;"	f	signature:()
+freeResources	main.cpp	/^void freeResources()$/;"	f	signature:()
+initResources	main.cpp	/^bool initResources()$/;"	f	signature:()
+main	main.cpp	/^int main(int argc, char* argv[]) $/;"	f	signature:(int argc, char* argv[])
+printLog	Util.cpp	/^void Util::printLog(GLuint object)$/;"	f	class:Util	signature:(GLuint object)
+printLog	Util.h	/^        void static printLog(GLuint object);$/;"	p	class:Util	access:public	signature:(GLuint object)
+readFile	Util.cpp	/^std::string Util::readFile(std::string filename)$/;"	f	class:Util	signature:(std::string filename)
+readFile	Util.h	/^        std::string static readFile(std::string filename);$/;"	p	class:Util	access:public	signature:(std::string filename)

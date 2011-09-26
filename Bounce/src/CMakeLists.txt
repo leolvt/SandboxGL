@@ -9,9 +9,14 @@ set(BOUNCE_LIBS
     ${GLEW_LIBRARY}
     )
 
-set(BOUNCE_SRC ${BOUNCE_SRC} 
+set(BOUNCE_SRC 
+    ${BOUNCE_SRC} 
+    Util.cpp
+    Exceptions.cpp
+    GLRenderer.cpp
+    Bounce.cpp
     main.cpp 
-)
+    )
 
 add_executable(Bounce ${BOUNCE_SRC})
 target_link_libraries(Bounce ${BOUNCE_LIBS})

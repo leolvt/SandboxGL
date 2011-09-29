@@ -9,5 +9,5 @@ set(CMAKE_MODULE_PATH
 
 add_subdirectory(HelloGL)
 add_subdirectory(Bounce)
-
+add_subdirectory(FromScratch)
 

@@ -16,7 +16,7 @@ Renderer::Renderer()
     if (res == GL_FALSE) throw GLFWException("Error initializing GLFW");
 
     // Set Default value for window properties
-    this->wWidth = 800;
+    this->wWidth = 600;
     this->wHeight = 600;
     this->wTitle = "OpenGl Rendered Window";
 }
@@ -59,6 +59,7 @@ void Renderer::createWindow()
         GLFW_WINDOW     // Window Mode
     );
     if (res == GL_FALSE) throw GLFWException("Error opening window.");
+    glewInit();
 }
 
 // ========================== //
@@ -229,7 +230,7 @@ Object Renderer::createObject(std::vector<Vertex>& vList)
     glBindBuffer(GL_ARRAY_BUFFER, obj.VBO);
     glVertexAttribPointer(  // Vertex Location
             0,                  // Attrib Index 
-            3,                  // Attrib Size
+            2,                  // Attrib Size
             GL_FLOAT,           // Attrib type
             GL_FALSE,           // Normalize?
             sizeof(Vertex),     // Stride
@@ -241,7 +242,7 @@ Object Renderer::createObject(std::vector<Vertex>& vList)
             GL_FLOAT,           // Attrib type
             GL_FALSE,           // Normalize?
             sizeof(Vertex),     // Stride
-            BUFFER_OFFSET(sizeof(float)*3)    // Offset
+            BUFFER_OFFSET(sizeof(float)*2)    // Offset
     );
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
@@ -269,7 +270,7 @@ void Renderer::drawObject(Program prog, Object obj, glm::mat4 Modelview)
     glBindVertexArray(obj.VAO);
 
     // Push Vertices to Shader
-    glDrawArrays(GL_TRIANGLES, 0, obj.numVertices);
+    glDrawArrays(GL_TRIANGLE_FAN, 0, obj.numVertices);
 }
 
 // ========================== //

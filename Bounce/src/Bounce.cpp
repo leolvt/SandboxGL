@@ -1,73 +1,91 @@
+#include <iostream>
+#include <cstdlib>
+
 #include <GL/glew.h>
 #include <GL/glfw.h>
+#include <glm/glm.hpp>
 
 #include "Bounce.h"
-#include "Exceptions.h"
 
 // ========================== //
 
-Bounce::Bounce()
+Bounce::Bounce(unsigned int numBalls)
 {
+    // Set Up a GL Context
+    std::cout << ">> Setting OpenGL Context via GLFW...   " << std::flush;
+    glfwInit();
+    std::cout << "[DONE]" << std::endl;
+
+    // Create Balls
+    std::cout << ">> Creating " << numBalls << " ball(s)...   " << std::flush;
+    srand48( time(NULL) );
+    for (int i = 0; i < numBalls; i++) {
+        this->balls.push_back(Ball(0, 0, 0.05));
+    }
+    std::cout << "[DONE]" << std::endl;
 }
 
 // ========================== //
 
 Bounce::~Bounce()
 {
+    std::cout << ">> Freeing resources...   " << std::flush;
+    this->balls.clear();
+    std::cout << "[DONE]" << std::endl;
 }
 
 // ========================== //
-#include <iostream>
+
 void Bounce::run()
 {
     // Open a new window
-    renderer.createWindow();
+    std::cout << ">> Opening OpenGL Window via GLFW...   " << std::flush;
+    glfwOpenWindow(800, 800, 8, 8, 8, 0, 0, 0, GLFW_WINDOW);
+    glClearColor(1,1,1,1);
+    glfwSetWindowTitle("Bouce v1.0");
+    std::cout << "[DONE]" << std::endl;
 
     // Create Program
-    Program prog = Renderer::createProgram("vshader.glsl", "fshader.glsl");
-
-    // Center at (0,0), radius of 0.5
-    std::vector<Vertex> vList;
-    Vertex Center = {0.0, 0.0, 1.0, 1.0, 1.0};
-    vList.push_back(Center);
-    const float PI = 3.1415926f;
-    const float radius = 0.85;
-    const int nVertices = 36;
-    for (int i = 0; i <= nVertices; i++) {
-        float deg = 2*PI / nVertices * i;
-        std::cout << "Degree: " << deg << std::endl;
-        Vertex v;
-        v.X = radius * glm::cos(deg);
-        v.Y = radius * glm::sin(deg);
-
-        std::cout << "X: " << v.X << std::endl;
-        std::cout << "Y: " << v.Y << std::endl;
-        v.R = 0.5 + sin(deg/4 - PI/2)/2;
-        v.G = 0;//0.5 + sin(deg/4)/2;
-        v.B = 0;//0.5 + sin(deg/4)/2;
-        std::cout << "R: " << v.R << " ";
-        std::cout << "G: " << v.G << " ";
-        std::cout << "B: " << v.B << std::endl << std::endl;
-        vList.push_back(v);
-    }
-    Object triangle = Renderer::createObject(vList);
+    //Program prog = Renderer::createProgram("vshader.glsl", "fshader.glsl");
 
     // Main loop
-    running = true;
+    bool running = true;
+    bool paused = false;
     while( running )
     {
-        // for obj in list of obj:
-        //    obj.draw();
-        glm::mat4 matriz(1.0f);
-        renderer.drawObject(prog, triangle, matriz);
-       
-        // Render Final Image
-        renderer.render();
+        // Check for mouse button for pause and velocity randomize
+        if ( glfwGetMouseButton(GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS )
+        {
+            paused = !paused;
+        }
+
+        if ( glfwGetMouseButton(GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS )
+        {
+            for (int i = 0; i < balls.size(); i++) {
+                balls[i].randomizeSpeed();
+            }
+        }
+
+        if (!paused)
+        {
+            // Clear Frame
+            glClear(GL_COLOR_BUFFER_BIT);
+
+            // Update Balls and draw balls
+            for (int i = 0; i < balls.size(); i++) {
+                balls[i].update();
+                balls[i].draw();
+            }
+            
+            // Render Final Image
+            glfwSwapBuffers();
+        }
 
         // Check if ESC key was pressed or window was closed
         running = !glfwGetKey( GLFW_KEY_ESC ) &&
             glfwGetWindowParam( GLFW_OPENED );
 
+        glfwPollEvents();
         glfwSleep(0.02);
     }
 

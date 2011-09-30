@@ -1,19 +1,19 @@
 #ifndef BOUNCE_H_INCLUDED
 #define BOUNCE_H_INCLUDED
 
-#include "GLRenderer.h"
+#include <vector>
+#include "Ball.h"
 
 // ========================== //
 
 class Bounce {
     public:
-        Bounce();
+        Bounce(unsigned int numBalls = 10);
         void run();
         virtual ~Bounce ();
 
     private:
-        bool running;
-        Renderer renderer;
+        std::vector<Ball> balls;
 };
 
 // ========================== //

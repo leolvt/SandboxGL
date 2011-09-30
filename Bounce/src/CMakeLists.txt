@@ -11,9 +11,7 @@ set(BOUNCE_LIBS
 
 set(BOUNCE_SRC 
     ${BOUNCE_SRC} 
-    Util.cpp
-    Exceptions.cpp
-    GLRenderer.cpp
+    Ball.cpp
     Bounce.cpp
     main.cpp 
     )

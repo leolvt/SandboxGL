@@ -11,19 +11,20 @@ bool init_resources()
 
 void display()
 {
-    glClear( GL_COLOR_BUFFER_BIT );
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 //    glMatrixMode( GL_PROJECTION );
 //    glLoadIdentity();
 //    glFrustum( -1, 1, -1, 1, 1, 1000 );
 //    glMatrixMode( GL_MODELVIEW );
 //    glLoadIdentity();
 //    glTranslatef( 0, 0, -3 );
+    glEnable(GL_DEPTH_TEST);
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity();
     gluPerspective(45, 1, 0, 3);
     glMatrixMode( GL_MODELVIEW );
     glLoadIdentity();
-    gluLookAt(3, 0, -3, 0, 0, 0, 0, 1, 0);
+    gluLookAt(5, 0, -5, 0, 0, 0, 0, 1, 0);
 
     glBegin( GL_TRIANGLE_FAN );
         glColor3f( 1, 0, 0 );

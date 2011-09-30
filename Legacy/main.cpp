@@ -12,19 +12,25 @@ bool init_resources()
 void display()
 {
     glClear( GL_COLOR_BUFFER_BIT );
+//    glMatrixMode( GL_PROJECTION );
+//    glLoadIdentity();
+//    glFrustum( -1, 1, -1, 1, 1, 1000 );
+//    glMatrixMode( GL_MODELVIEW );
+//    glLoadIdentity();
+//    glTranslatef( 0, 0, -3 );
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity();
-    glFrustum( -1, 1, -1, 1, 1, 1000 );
+    gluPerspective(30, 1, 0, 1);
     glMatrixMode( GL_MODELVIEW );
     glLoadIdentity();
-    glTranslatef( 0, 0, -3 );
+    gluLookAt(3, 0, -3, 0, 0, 0, 0, 1, 0);
 
     glBegin( GL_POLYGON );
         glColor3f( 0, 1, 0 );
-        glVertex3f( -1, -1, 0 ); 
-        glVertex3f( -1, 1, 0 );  
-        glVertex3f( 1, 1, 0 );   
-        glVertex3f( 1, -1, 0 ); 
+        glVertex3f( -0.8, -0.8, 0 ); 
+        glVertex3f( -0.8, 0.8, 0 );  
+        glVertex3f( 0.8, 0.8, 0 );   
+        glVertex3f( 0.8, -0.8, 0 ); 
     glEnd();
 
     glutSwapBuffers();

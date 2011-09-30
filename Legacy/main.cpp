@@ -20,19 +20,59 @@ void display()
 //    glTranslatef( 0, 0, -3 );
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity();
-    gluPerspective(30, 1, 0, 1);
+    gluPerspective(45, 1, 0, 3);
     glMatrixMode( GL_MODELVIEW );
     glLoadIdentity();
     gluLookAt(3, 0, -3, 0, 0, 0, 0, 1, 0);
 
-    glBegin( GL_POLYGON );
-        glColor3f( 0, 1, 0 );
-        glVertex3f( -0.8, -0.8, 0 ); 
-        glVertex3f( -0.8, 0.8, 0 );  
-        glVertex3f( 0.8, 0.8, 0 );   
-        glVertex3f( 0.8, -0.8, 0 ); 
+    glBegin( GL_TRIANGLE_FAN );
+        glColor3f( 1, 0, 0 );
+        glVertex3f(-1, -1, 0);
+        glVertex3f(-1, 1, 0);
+        glVertex3f(-1, 1, 1);
+        glVertex3f(-1, -1, 1);
     glEnd();
 
+    glBegin( GL_TRIANGLE_FAN );
+        glColor3f( 0, 0, 1 );
+        glVertex3f(-1, -1, 0);
+        glVertex3f(-1, -1, 1);
+        glVertex3f(1, -1, 1);
+        glVertex3f(1, -1, 0);
+    glEnd();
+
+    glBegin( GL_TRIANGLE_FAN );
+        glColor3f( 0, 0.5, 0 );
+        glVertex3f( -1, -1, 1 ); 
+        glVertex3f( -1, 1, 1 );  
+        glVertex3f( 1, 1, 1 );   
+        glVertex3f( 1, -1, 1 ); 
+    glEnd();
+
+    glBegin( GL_TRIANGLE_FAN );
+        glColor3f( 0, 0, 0.5 );
+        glVertex3f(-1, 1, 0);
+        glVertex3f(-1, 1, 1);
+        glVertex3f(1, 1, 1);
+        glVertex3f(1, 1, 0);
+    glEnd();
+
+    glBegin( GL_TRIANGLE_FAN );
+        glColor3f( 0.5, 0, 0 );
+        glVertex3f(1, -1, 0);
+        glVertex3f(1, 1, 0);
+        glVertex3f(1, 1, 1);
+        glVertex3f(1, -1, 1);
+    glEnd();
+
+    glBegin( GL_TRIANGLE_FAN );
+        glColor3f( 0, 1, 0 );
+        glVertex3f( -1, -1, 0 ); 
+        glVertex3f( -1, 1, 0 );  
+        glVertex3f( 1, 1, 0 );   
+        glVertex3f( 1, -1, 0 ); 
+    glEnd();
+        
     glutSwapBuffers();
 }
 

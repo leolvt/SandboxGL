@@ -40,29 +40,46 @@ void Bounce::run()
 {
     // Open a new window
     std::cout << ">> Opening OpenGL Window via GLFW...   " << std::flush;
-    glfwOpenWindow(800, 800, 8, 8, 8, 0, 0, 0, GLFW_WINDOW);
+    glfwOpenWindow(800, 400, 8, 8, 8, 0, 0, 0, GLFW_WINDOW);
     glClearColor(1,1,1,1);
     glfwSetWindowTitle("Bouce v1.0");
     std::cout << "[DONE]" << std::endl;
 
     // Create Program
     //Program prog = Renderer::createProgram("vshader.glsl", "fshader.glsl");
+    
+    // Setting Projection Matrix
+    glMatrixMode( GL_PROJECTION );
+    gluOrtho2D(-2, 2, -1, 1);
+    glMatrixMode( GL_MODELVIEW );
 
     // Main loop
     bool running = true;
     bool paused = false;
+    bool lmb = false;
     while( running )
     {
         // Check for mouse button for pause and velocity randomize
-        if ( glfwGetMouseButton(GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS )
+        if ( glfwGetMouseButton(GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE )
         {
-            paused = !paused;
+            if (lmb)
+            {
+                paused = !paused;
+            }
+            lmb = false;
         }
+        else lmb = true;
 
         if ( glfwGetMouseButton(GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS )
         {
             for (int i = 0; i < balls.size(); i++) {
                 balls[i].randomizeSpeed();
+            }
+        }
+        if (glfwGetKey('R') == GLFW_PRESS) 
+        {
+            for (int i = 0; i < balls.size(); i++) {
+                balls[i].reset();
             }
         }
 
@@ -82,7 +99,7 @@ void Bounce::run()
         }
 
         // Check if ESC key was pressed or window was closed
-        running = !glfwGetKey( GLFW_KEY_ESC ) &&
+        running = !glfwGetKey( GLFW_KEY_ESC ) && !glfwGetKey('Q') && 
             glfwGetWindowParam( GLFW_OPENED );
 
         glfwPollEvents();

@@ -14,6 +14,7 @@ class Ball
         virtual ~Ball();
         void update();
         void randomizeSpeed();
+        void reset();
         void draw();
 
     private:

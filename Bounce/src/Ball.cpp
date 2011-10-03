@@ -36,11 +36,15 @@ void Ball::update()
     // Check Bounds
     if (X >= 1.0 || X <= -1.0)
     {
+        if (X > 1.0) X = 1.0;
+        else if (X < -1.0) X = -1.0;
         velX *= -1;
     }
 
     if (Y >= 1.0 || Y <= -1.0)
     {
+        if (Y > 1.0) Y = 1.0;
+        else if ( Y < -1.0) Y = -1.0;
         velY *= -1;
     }
 }
@@ -51,6 +55,14 @@ void Ball::randomizeSpeed()
 {
     velX = (-1.0 + 2*drand48()) * MAX_VEL;
     velY = (-1.0 + 2*drand48()) * MAX_VEL;
+}
+
+// ========================== //
+
+void Ball::reset()
+{
+    this->X = 0.0;
+    this->Y = 0.0;
 }
 
 // ========================== //

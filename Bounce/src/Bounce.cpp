@@ -40,7 +40,7 @@ void Bounce::run()
 {
     // Open a new window
     std::cout << ">> Opening OpenGL Window via GLFW...   " << std::flush;
-    glfwOpenWindow(800, 400, 8, 8, 8, 0, 0, 0, GLFW_WINDOW);
+    glfwOpenWindow(800, 800, 8, 8, 8, 0, 0, 0, GLFW_WINDOW);
     glClearColor(1,1,1,1);
     glfwSetWindowTitle("Bouce v1.0");
     std::cout << "[DONE]" << std::endl;
@@ -50,7 +50,7 @@ void Bounce::run()
     
     // Setting Projection Matrix
     glMatrixMode( GL_PROJECTION );
-    gluOrtho2D(-2, 2, -1, 1);
+    gluOrtho2D(-1, 1, -1, 1);
     glMatrixMode( GL_MODELVIEW );
 
     // Main loop
